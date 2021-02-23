@@ -1,0 +1,55 @@
+{% extends "task/base.html" %}
+
+{% block content %}
+    <div>
+    <div class="container-xxl">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Имя:</label>
+                <input type="text" name="name" class="form-control" id="exampleFormControlInput1"
+                       placeholder="name example" value="{{ task.name }}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Описание:</label>
+                <textarea class="form-control" name="description" id="exampleFormControlTextarea1"
+                          rows="3">{{ task.description }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-check-label" for="flexCheckDefault" style="margin-right: 4px">
+                    Завершена:
+                </label>
+                <input class="form-check-input" type="checkbox" name="completed" id="flexCheckDefault"
+                        {% if task.completed %} checked {% endif %}>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Категория:</label>
+                <select class="form-select" name="category" aria-label="Default select example" style="max-width:380px">
+                    {% for cat in category %}
+                        <option value="{{ cat.pk }}"
+                                {% if cat == task.category %} selected {% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Конец:</label>
+                <input type="date" name="end_date" class="form-control" id="exampleFormControlInput1"
+                       style="max-width:380px" value="{{ task.end_date|date:'Y-m-d' }}">
+            </div>
+            <div class="mb-4">
+                <input type="hidden" id="previous_page" name="previous_page"
+                       value="/previous/page/url">
+                <button formaction="{% url 'task_update' slug=task.slug %}" type="submit"
+                        class="btn btn-outline-primary">Сохранить
+                </button>
+                <button formaction="{% url 'task_delete' slug=task.slug %}" type="submit"
+                        class="btn btn-outline-danger"> Удалить
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        prev = document.getElementById("previous_page");
+        prev.value = document.referrer;
+    </script>
+{% endblock content %}

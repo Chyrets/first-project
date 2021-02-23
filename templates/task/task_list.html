@@ -1,0 +1,66 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+    <div class="container-xxl">
+        <form action="{% url 'task_create' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Имя:</label>
+                <input type="text" name="name" class="form-control" id="exampleFormControlInput1"
+                       placeholder="name example" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Описание:</label>
+                <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3"
+                          required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Категория:</label>
+                <select class="form-select" name="category" aria-label="Default select example" style="max-width:380px">
+                    {% for cat in category %}
+                        <option value="{{ cat.pk }}"
+                                {% if cat.name == "Другое" %} selected {% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Конец:</label>
+                <input type="date" name="end_date" class="form-control" id="exampleFormControlInput1"
+                       style="max-width:380px">
+            </div>
+            <div class="mb-4">
+                <button class="btn btn-primary" type="submit">Создать</button>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Имя</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Завершена</th>
+                <th scope="col">Категория</th>
+                <th scope="col">Начало</th>
+                <th scope="col">Конец</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in task_list %}
+                <tr>
+                    <th scope="row">
+                        <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
+                    </th>
+                    <td>{{ task.description|truncatechars:"64" }}</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" name="completed" id="id_completed" type="checkbox" {% if task.completed %} checked {% endif %}>
+                        </div>
+                    </td>
+                    <td>{{ task.category }}</td>
+                    <td>{{ task.start_date }}</td>
+                    <td>{{ task.end_date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

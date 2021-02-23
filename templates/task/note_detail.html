@@ -1,0 +1,46 @@
+{% extends "task/base.html" %}
+
+{% block content %}
+    <div class="container-xxl">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Имя:</label>
+                <input type="text" name="name" class="form-control" id="exampleFormControlInput1"
+                       value="{{ note.name }}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Описание:</label>
+                <textarea class="form-control" name="description" id="exampleFormControlTextarea1"
+                          rows="3">{{ note.description }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Категория:</label>
+                <select class="form-select" name="category" aria-label="Default select example">
+                    {% for cat in category %}
+                        <option value="{{ cat.pk }}"
+                                {% if cat == note.category %} selected {% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Дата: {{ note.date|date:"d-M-Y" }}</label>
+            </div>
+            <div class="mb-4">
+                <input type="hidden" id="previous_page" name="previous_page"
+                       value="/previous/page/url">
+                <button formaction="{% url 'note_update' slug=note.slug %}" type="submit"
+                        class="btn btn-outline-primary"> Сохранить
+                </button>
+                <button formaction="{% url 'note_delete' slug=note.slug %}" type="submit"
+                        class="btn btn-outline-danger"> Удалить
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        prev = document.getElementById("previous_page");
+        prev.value = document.referrer;
+    </script>
+{% endblock content %}

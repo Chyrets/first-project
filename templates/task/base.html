@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link type="text/css" href="{% static 'task/css/style.css' %}" rel="stylesheet"/>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+{% block mainmenu %}
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-xxl">
+            <form class="d-flex">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        {% url "article_list" as url_article_list %}
+                        <a class="nav-link {% if url_article_list == request.path %}active{% endif %}"
+                           href="{{ url_article_list }}">Статьи</a>
+                    </li>
+                    <li class="nav-item">
+                        {% url "note_list" as url_note_list %}
+                        <a class="nav-link {% if url_note_list == request.path %}active{% endif %}"
+                           href="{{ url_note_list }}">Заметки</a>
+                    </li>
+                    <li class="nav-item">
+                        {% url "task_list" as url_task_list %}
+                        <a class="nav-link {% if url_task_list == request.path %}active{% endif %}"
+                           href="{{ url_task_list }}">Задачи</a>
+                    </li>
+                    <li class="nav-item">
+                        {% url 'calendar' as url_show_cal %}
+                        <a class="nav-link {% if url_show_cal == request.path %}active{% endif %}"
+                           href="{{ url_show_cal }}">Календарь</a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item" style="margin-left: 10px; margin-top: 1px">
+                            <button formaction="{% url 'logout_page' %}" type="submit" class="btn btn-outline-danger">
+                                Выйти
+                            </button>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            {% url "login_page" as url_login_page %}
+                            <a class="nav-link {% if url_login_page == request.path %}active{% endif %}"
+                               href="{{ url_login_page }}">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            {% url "register_page" as url_register_page %}
+                            <a class="nav-link {% if url_register_page == request.path %}active{% endif %}"
+                               href="{{ url_register_page }}">Регистрация</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </form>
+            <div>
+                <span class="navbar-text">
+                    {{ request.user }}
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+            crossorigin="anonymous"></script>
+{% endblock mainmenu %}
+
+{% block content %}
+{% endblock content %}
+</body>
+</html>

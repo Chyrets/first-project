@@ -1,0 +1,15 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+    <div class="container-xxl">
+        <div class="clearfix">
+            <a class="btn btn-primary right mr-2" href="{% url 'calendar' %}?{{ next_month }}"> Next Month >> </a>
+            <a class="btn btn-primary right mr-2" href="{% url 'calendar' %}?{{ prev_month }}"
+               style="margin-right: 10px"> << Previous Month </a>
+        </div>
+        <div>
+            {{ calendar }}
+        </div>
+
+    </div>
+{% endblock %}

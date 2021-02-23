@@ -1,0 +1,53 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+    <div class="container-xxl">
+        <form action="{% url 'note_create' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Имя:</label>
+                <input type="text" name="name" class="form-control" id="exampleFormControlInput1"
+                       placeholder="name example" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Описание:</label>
+                <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3"
+                          required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Категория:</label>
+                <select class="form-select" name="category" aria-label="Default select example" style="max-width:380px">
+                    {% for cat in category %}
+                        <option value="{{ cat.pk }}"
+                                {% if cat.name == "Другое" %} selected {% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <button class="btn btn-primary" type="submit">Создать</button>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Имя</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Категория</th>
+                <th scope="col">Дата</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for note in note_list %}
+                <tr>
+                    <th scope="row">
+                        <a href="{{ note.get_absolute_url }}">{{ note.name }}</a>
+                    </th>
+                    <td>{{ note.description|truncatechars:"64" }}</td>
+                    <td>{{ note.category }}</td>
+                    <td>{{ note.date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
